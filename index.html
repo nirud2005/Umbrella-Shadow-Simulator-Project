@@ -183,6 +183,35 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
   .d-head, .d-body { padding-left: 20px; padding-right: 20px; }
 }
 
+/* หน้าต่างดู Animation: ลูกโลก (ซ้าย) + กราฟเงา (ขวา) พร้อมกัน */
+#anim { position: fixed; inset: 0; z-index: 30; display: flex; flex-direction: column; background: var(--paper); }
+.an-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; padding: 14px 24px 4px; }
+.an-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.an-time { display: flex; align-items: center; gap: 16px; padding: 0 24px; }
+.an-time > b { flex: none; min-width: 112px; font-size: 26px; font-weight: 700; line-height: 1.3; color: var(--a500); }
+.an-time .rng { flex: 1; }
+.an-state { padding: 0 24px 8px; font-weight: 600; }
+.an-body { flex: 1; min-height: 0; overflow: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; padding: 4px 24px 20px; }
+.an-globe { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px; border-radius: var(--r-shell); border: 1px solid var(--line); background: var(--stage); }
+.an-globe .g-r { align-self: stretch; text-align: center; }
+.an-stage { width: min(100%, calc(100vh - 300px)); min-width: 260px; aspect-ratio: 1; }
+.an-stage canvas { display: block; width: 100%; height: 100%; }
+.an-chart { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.an-chart .tiles { align-self: stretch; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.an-chart .tile { padding: 8px 12px; }
+.an-chart .tile .v { font-size: 20px; }
+.an-chart .tile .s { display: none; }
+#cv3 { width: min(100%, calc((100vh - 330px) * .851)); min-width: 260px; }
+@media (max-width: 900px) {
+  .an-head, .an-time, .an-state, .an-body { padding-left: 14px; padding-right: 14px; }
+  .an-body { grid-template-columns: minmax(0, 1fr); }
+  .an-stage { width: min(100%, 34vh); min-width: 200px; }
+  #cv3 { width: min(100%, calc(52vh * .851)); }
+  #h-an { font-size: 18px !important; }
+  .an-time > b { min-width: 92px; font-size: 22px; }
+  .an-chart .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 /* ขนาดหน้าจอ: ปกติ (ค่าเดิม) / ใหญ่ / ใหญ่มาก */
 .tile .v { overflow-wrap: anywhere; }
 .rz[data-size="lg"] { --s: 1.2; --cv-w: 420px; --cv2-w: 480px; --drawer-w: 1100px; }
@@ -348,6 +377,38 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
   </aside>
 </div>
 
+<div id="anim" hidden>
+  <div class="an-head" role="dialog" aria-modal="true" aria-labelledby="h-an">
+    <div>
+      <h2 id="h-an" style="font-size:22px;font-weight:700;line-height:1.3">Animation ตลอดวัน (พระอาทิตย์ขึ้น–ตก)</h2>
+      <p id="an-sub" class="cap" style="font-weight:500"></p>
+    </div>
+    <div class="an-ctl">
+      <button id="go2" type="button" class="btn btn-primary"></button>
+      <button id="restart2" type="button" class="btn btn-icon" aria-label="เริ่มใหม่"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 109-9 9 9 0 00-6.4 2.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+      <label class="field" style="flex-direction:row;align-items:center;gap:8px"><span>ความเร็ว</span>
+        <select id="spd2" class="in" style="width:92px"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label>
+      <button id="close-an" type="button" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>ปิดหน้าต่างนี้</button>
+    </div>
+  </div>
+  <div class="an-time">
+    <b id="an-clock"></b>
+    <label class="field" style="flex:1"><span class="sr">เลื่อนดูเวลาในช่วงพระอาทิตย์ขึ้น–ตก</span><input id="tr2" class="rng" type="range" min="0" max="1000" step="1" value="0"></label>
+  </div>
+  <p id="an-state" class="cap an-state"></p>
+  <div class="an-body">
+    <section class="an-globe" aria-label="ลูกโลก">
+      <div class="an-stage"><canvas id="gl2" role="img" aria-label="ลูกโลกมองจากเหนือตำแหน่งของคุณ แสดงด้านกลางวันและกลางคืน"></canvas></div>
+      <p id="gi2" class="g-r"></p>
+    </section>
+    <section class="an-chart" aria-label="กราฟเงา">
+      <div id="out2" class="tiles"></div>
+      <div id="cv3"></div>
+      <p class="cap" style="font-weight:500;text-align:center;line-height:1.5">มองจากด้านบน · เหนืออยู่บน · วงขาว = ร่ม · วงทึบ = เงา · จุดเล็กสีแดงเข้ม = ตำแหน่งเงาที่ผ่านมาตั้งแต่พระอาทิตย์ขึ้น</p>
+    </section>
+  </div>
+</div>
+
 </form>
 </div>
 
@@ -447,10 +508,10 @@ function sunTrack(p) {
 }
 
 /* ---------- กราฟเงา 2D (SVG) ---------- */
-function diagram(p, r, B, big) {
+function diagram(p, r, B, big, trail, idn) {
   const S = 176 / B, c = 200, Rp = p.R * S;
   const lab = Rp >= 34 ? 24 : Rp >= 20 ? 16 : 0;
-  const cid = big ? "clipB" : "clipA";
+  const cid = idn || (big ? "clipB" : "clipA");
   let s = `<svg viewBox="0 0 400 470" style="display:block;width:100%;height:auto" role="img" aria-label="กราฟเงามองจากด้านบน ทิศเหนืออยู่ด้านบน ${r.sunUp ? `เงาอยู่ทาง${r.dirName} ห่าง ${r.d.toFixed(2)} เมตร พิกัด (${r.xc.toFixed(2)}, ${r.yc.toFixed(2)}) เมตร` : r.alpha > SUN_H0 ? "ดวงอาทิตย์อยู่ที่ขอบฟ้า เงายาวมากจนไม่แสดง" : "ไม่มีเงาเพราะดวงอาทิตย์อยู่ใต้ขอบฟ้า"}">
 <defs><clipPath id="${cid}"><circle cx="200" cy="200" r="190"/></clipPath></defs>
 <circle cx="200" cy="200" r="192" stroke-width="2" style="fill:var(--paper-2);stroke:var(--line)"/>
@@ -460,6 +521,10 @@ function diagram(p, r, B, big) {
 <line x1="40" y1="200" x2="360" y2="200" stroke-width="1.5" stroke-opacity=".5" style="stroke:var(--ink-faint)"/>
 ${[["N", 200, 36], ["E", 371, 209], ["S", 200, 381], ["W", 29, 209]].map(([t, x, y]) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="26" font-weight="700" style="fill:var(--ink-soft)">${t}</text>`).join("")}`;
   let after = "";
+  if (trail && trail.length > 1) { // รอยทางของเงา: จุดตำแหน่งเงาที่ผ่านมาตั้งแต่พระอาทิตย์ขึ้น
+    const xy = ([x, y]) => `${(c + x * S).toFixed(1)},${(c - y * S).toFixed(1)}`;
+    s += `<g clip-path="url(#${cid})"><polyline points="${trail.map(xy).join(" ")}" fill="none" stroke-width="2" stroke-linejoin="round" stroke-opacity=".35" style="stroke:var(--a500)"/>${trail.filter((_, i) => i % 5 === 0).map(([x, y]) => `<circle cx="${(c + x * S).toFixed(1)}" cy="${(c - y * S).toFixed(1)}" r="${big ? 3 : 3.5}" fill-opacity=".75" style="fill:var(--a500)"/>`).join("")}</g>`;
+  }
   if (r.sunUp) {
     const az = rad(r.psiSun), ux = Math.sin(az), uy = -Math.cos(az);
     const sx = c + 140 * ux, sy = c + 140 * uy;
@@ -499,13 +564,17 @@ ${lab ? `<text x="200" y="${200 + lab / 3}" text-anchor="middle" font-size="${la
 /* ---------- แผงผลลัพธ์ + ข้อมูลเชิงลึก ---------- */
 const f2 = (v, n = 2) => v.toFixed(n);
 const sg = (v) => (v < 0 ? "−" : "") + Math.abs(v).toFixed(2);
-function panel(p, r) {
+function tilesHTML(r) {
   const up = r.sunUp;
-  $("out").innerHTML = `
+  return `
 <div class="tile"><span class="k">มุมเงยดวงอาทิตย์ (α)</span><span class="v">${sg(r.alpha)}<span class="u">°</span></span></div>
 <div class="tile"><span class="k">เวลาสุริยะ (ST)</span><span class="v">${hm(r.st)}<span class="u">น.</span></span></div>
 <div class="tile"><span class="k">ทิศของเงา</span><span class="v">${up ? f2(r.psiShadow) : "–"}<span class="u">${up ? "°" : ""}</span></span><span class="s">${up ? r.dirName : r.alpha > SUN_H0 ? "เงายาวมาก (ดวงอาทิตย์ที่ขอบฟ้า)" : "ไม่มีเงา"}</span></div>
 <div class="tile tile-hot"><span class="k">ระยะเงา (d)</span><span class="v">${up ? f2(r.d) : "–"}<span class="u">${up ? "เมตร" : ""}</span></span></div>`;
+}
+function panel(p, r) {
+  const up = r.sunUp;
+  $("out").innerHTML = tilesHTML(r);
 
   const row = (k, sym, v) => `<div class="row"><dt>${k}</dt><dd>${sym ? `<span class="sym">${sym}</span>` : ""}${v}</dd></div>`;
   const dash = (v) => (up ? v : "–");
@@ -523,7 +592,7 @@ ${row("พิกัดฉาก", "(x, y)", dash(`(${sg(r.xc)}, ${sg(r.yc)}) m`)
 }
 
 /* ---------- ลูกโลก (canvas; สีอ่านจากโทเคน CSS) ---------- */
-const gcv = $("gl"), gctx = gcv.getContext("2d");
+const gcv = $("gl"), gctx = gcv.getContext("2d"), gcv2 = $("gl2");
 const STARS = [[60,70,2],[140,40,1.6],[720,60,2.2],[760,150,1.5],[40,300,1.6],[90,700,2],[180,760,1.6],[700,740,2.2],[760,610,1.5],
   [30,520,1.4],[620,30,1.4],[300,25,1.6],[770,380,1.8],[25,420,1.4],[560,775,1.5],[380,780,1.4],[110,160,1.4],[690,190,1.3]];
 let land = null;
@@ -534,11 +603,11 @@ if (typeof fetch === "function" && typeof topojson !== "undefined") {
     .catch(() => {}); // ไม่มีแผนที่ก็ยังแสดงลูกโลกเปล่าได้
 }
 
-function renderGlobe(p, r) {
+function renderGlobe(p, r, cv = gcv, gi = $("gi")) {
   if (typeof d3 === "undefined") return;
-  const W = gcv.clientWidth; if (!W) return;
-  const dpr = window.devicePixelRatio || 1, g = gctx;
-  gcv.width = gcv.height = Math.round(W * dpr);
+  const W = cv.clientWidth; if (!W) return;
+  const dpr = window.devicePixelRatio || 1, g = cv === gcv ? gctx : (cv._c = cv._c || cv.getContext("2d"));
+  cv.width = cv.height = Math.round(W * dpr);
   g.setTransform(dpr, 0, 0, dpr, 0, 0);
   const k = W / 800, C = W / 2, Rg = 330 * k;
   const proj = d3.geoOrthographic().rotate([-p.lon, -p.lat]).scale(Rg).translate([C, C]).clipAngle(90);
@@ -606,7 +675,7 @@ function renderGlobe(p, r) {
   circle(C, C, 11 * k); g.fillStyle = col.a500; g.fill(); g.strokeStyle = col.paper; g.lineWidth = 4.5 * k; g.stroke();
 
   const fmt = (la, lo) => `${Math.abs(la).toFixed(2)}°${la >= 0 ? "N" : "S"}  ${Math.abs(lo).toFixed(2)}°${lo >= 0 ? "E" : "W"}`;
-  $("gi").innerHTML = `จุดใต้ดวงอาทิตย์<br><b>${fmt(sun[1], sun[0])}</b><br><span style="font-size:12.5px;font-weight:500">ห่างจากคุณ ${(dist * 180 / Math.PI).toFixed(1)}° (= 90° − α)${vis ? "" : " · อยู่อีกฟากของโลก"}</span>`;
+  gi.innerHTML = `จุดใต้ดวงอาทิตย์<br><b>${fmt(sun[1], sun[0])}</b><br><span style="font-size:12.5px;font-weight:500">ห่างจากคุณ ${(dist * 180 / Math.PI).toFixed(1)}° (= 90° − α)${vis ? "" : " · อยู่อีกฟากของโลก"}</span>`;
 }
 
 /* ---------- ข้อความอธิบายให้ผู้ใช้ไม่สับสน ---------- */
@@ -618,25 +687,57 @@ function notes(p, anim, t) {
   $("sunline").textContent = s.none ? "(วันนี้ที่นี่ดวงอาทิตย์ไม่ขึ้น จึงเล่นไม่ได้)"
     : s.all ? "(วันนี้ที่นี่ดวงอาทิตย์ไม่ตก จึงเล่นครบ 24 ชั่วโมง)"
     : `(วันนี้ที่นี่ ขึ้น ${hm(s.up)} น. · ตก ${hm(s.down)} น.)`;
-  $("rng").textContent = !anim ? ""
+  let txt = !anim ? ""
     : s.none ? ""
     : s.all ? `ดวงอาทิตย์ไม่ตกวันนี้ · ตอนนี้ ${hm(t)} น.`
     : `พระอาทิตย์ขึ้น ${hm(s.up)} น. · ตก ${hm(s.down)} น. · ตอนนี้ ${hm(t)} น.`;
+  if (txt && edge) txt += edge.side === "down"
+    ? ` · ดวงอาทิตย์ตกแล้ว กราฟแสดงเงาตำแหน่งสุดท้ายก่อนตก (${hm(edge.t)} น.) เงายาวมาก`
+    : ` · ดวงอาทิตย์เพิ่งขึ้น กราฟแสดงเงาตำแหน่งแรกหลังขึ้น (${hm(edge.t)} น.) เงายาวมาก`;
+  if (txt && finished && !timer) txt += " · เล่นจบแล้ว ภาพนี้คือตำแหน่งสุดท้าย";
+  $("rng").textContent = txt; $("an-state").textContent = txt;
 }
 
 /* ---------- วาด / เล่น ---------- */
+let edge = null; // จังหวะพระอาทิตย์ขึ้น/ตกพอดี (α ≤ 0): ใช้เฟรมใกล้สุดที่ยังมีเงาแทน
+function trailPts(p, a, b) { // ตำแหน่งจุดกึ่งกลางเงาตั้งแต่ a ถึง b (ทุก 3 นาที)
+  const o = [];
+  for (let t = a; t < b; t += 0.05) { const q = calc(p, t); if (q.sunUp) o.push([q.xc, q.yc]); }
+  return o;
+}
 function draw(clockHours, fixed) {
   $("err").hidden = true;
   const p = readInputs();
   if (!p) return false;
   const anim = clockHours !== undefined;
-  const t = clockHours ?? p.clock, r = calc(p, t);
-  last = { p, r, t };
+  const t = clockHours ?? p.clock, ra = calc(p, t);
+  let r = ra, tc = t, trail = null; edge = null;
+  if (anim) {
+    const sp = animSpan(p);
+    if (!ra.sunUp && !sp.none && t >= sp.a - 1e-6 && t <= sp.b + 1e-6) {
+      const dir = t > (sp.a + sp.b) / 2 ? -1 : 1;
+      for (let k = 1; k <= 900; k++) { const u = t + dir * k * 0.001, q = calc(p, u); if (q.sunUp) { r = q; tc = u; edge = { t: u, side: dir < 0 ? "down" : "up" }; break; } }
+    }
+    trail = trailPts(p, sp.a, tc); if (r.sunUp) trail.push([r.xc, r.yc]);
+  }
+  last = { p, r, t: tc };
   const B = fixed ?? (anim ? dayBound(p) : Math.max(6, r.sunUp ? Math.abs(r.xc) + p.R + 3 : 0, r.sunUp ? Math.abs(r.yc) + p.R + 3 : 0, p.R + 3));
   panel(p, r);
-  $("cv").innerHTML = diagram(p, r, B);
-  $("cv2").innerHTML = diagram(p, r, B, true);
-  sunTrack(p); renderGlobe(p, r); notes(p, anim, t);
+  $("cv").innerHTML = diagram(p, r, B, false, trail);
+  $("cv2").innerHTML = diagram(p, r, B, true, trail);
+  sunTrack(p); notes(p, anim, t);
+  if ($("anim").hidden) renderGlobe(p, ra);
+  else { // หน้าต่าง Animation เปิดอยู่: วาดลูกโลกและกราฟเงาในหน้าต่าง
+    renderGlobe(p, ra, gcv2, $("gi2"));
+    $("out2").innerHTML = tilesHTML(r);
+    $("cv3").innerHTML = diagram(p, r, B, false, trail, "clipC");
+    $("an-clock").textContent = hm(t) + " น.";
+    const sp = animSpan(p), sl = sunTimes(p), sel = $("country");
+    if (sp.b > sp.a) $("tr2").value = Math.round(Math.max(0, Math.min(1, (t - sp.a) / (sp.b - sp.a))) * 1000);
+    const city = sel.value >= 0 ? PLACES[sel.value][0] : "ตำแหน่งที่กำหนด";
+    const dt = new Date(Date.UTC(p.y, p.m - 1, p.d)).toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+    $("an-sub").textContent = `ที่${city} · ${dt}` + (sl.up !== undefined && !sl.none && !sl.all ? ` · พระอาทิตย์ขึ้น ${hm(sl.up)} น. · ตก ${hm(sl.down)} น.` : "");
+  }
   return true;
 }
 const redraw = () => { if (!timer) draw(mode() === "anim" ? clock : undefined, mode() === "anim" ? bound : undefined); };
@@ -647,7 +748,7 @@ const ICON_STOP = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6"
 function setBtn() {
   const anim = mode() === "anim";
   $("time").disabled = $("tr").disabled = anim;
-  $("go").innerHTML = timer ? ICON_STOP + "หยุด" : ICON_PLAY + (finished ? "เล่นอีกครั้ง" : anim && started && clock > span.a + 1e-9 ? "เล่นต่อ" : "เล่น");
+  $("go").innerHTML = $("go2").innerHTML = timer ? ICON_STOP + "หยุด" : ICON_PLAY + (finished ? "เล่นอีกครั้ง" : anim && started && clock > span.a + 1e-9 ? "เล่นต่อ" : "เล่น");
 }
 function stop() { clearInterval(timer); timer = null; }
 function setMode(v) { document.querySelector(`input[name=mode][value=${v}]`).checked = true; }
@@ -662,17 +763,45 @@ function play(restart) {
   started = true;
   const step = () => {
     $("time").value = tIn(clock); syncSlider();
+    const end = clock >= span.b;
+    if (end) finished = true; // ตั้งก่อนวาด เพื่อให้ข้อความ "เล่นจบแล้ว" แสดงที่เฟรมสุดท้าย
+    if (end) stop();
     draw(clock, bound);
-    if (clock >= span.b) { stop(); finished = true; setBtn(); return; }
+    if (end) { setBtn(); return; }
     clock = Math.min(clock + STEP_H * +$("spd").value, span.b);
   };
   stop(); timer = setInterval(step, 25); step(); setBtn();
 }
-$("go").onclick = () => {
-  if (timer) { stop(); setBtn(); return; }
-  setMode("anim"); play(false);
-};
-$("restart").onclick = () => { setMode("anim"); play(true); };
+/* ---------- หน้าต่างดู Animation (ลูกโลกซ้าย + กราฟเงาขวา) ---------- */
+let anOpener = null;
+function openAnim() { anOpener = document.activeElement; $("anim").hidden = false; document.body.style.overflow = "hidden"; $("go2").focus(); }
+function closeAnim() {
+  stop(); $("anim").hidden = true; document.body.style.overflow = "";
+  setBtn(); draw(mode() === "anim" ? clock : undefined, mode() === "anim" ? bound : undefined);
+  anOpener && anOpener.focus();
+}
+function startFromMain(restart) {
+  const p = readInputs(); if (!p) return;
+  setMode("anim");
+  if (animSpan(p).none) { play(restart); return; } // แสดงข้อความว่าวันนี้ไม่มีดวงอาทิตย์ขึ้น
+  openAnim(); play(restart);
+}
+$("go").onclick = () => startFromMain(false);
+$("restart").onclick = () => startFromMain(true);
+$("go2").onclick = () => { if (timer) { stop(); setBtn(); return; } play(false); };
+$("restart2").onclick = () => play(true);
+$("close-an").onclick = closeAnim;
+$("spd").addEventListener("change", () => ($("spd2").value = $("spd").value));
+$("spd2").addEventListener("change", () => ($("spd").value = $("spd2").value));
+$("tr2").addEventListener("input", () => { // เลื่อนดูเวลาเอง (หยุดเล่นก่อน)
+  const p = readInputs(); if (!p) return;
+  const sp = animSpan(p); if (sp.none) return;
+  stop(); span = sp; bound = dayBound(p); started = true;
+  clock = sp.a + (sp.b - sp.a) * $("tr2").value / 1000;
+  finished = clock >= sp.b - 1e-9;
+  $("time").value = tIn(clock); syncSlider(); setBtn(); draw(clock, bound);
+});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("anim").hidden && $("drawer").hidden) closeAnim(); });
 document.querySelectorAll("input[name=mode]").forEach((e) => (e.onchange = () => {
   stop(); span = curSpan(); clock = span.a; finished = false; started = false; bound = null;
   if (mode() === "anim") { $("time").value = tIn(clock); syncSlider(); }
@@ -795,7 +924,7 @@ $("f").addEventListener("input", (e) => {
   else { bound = null; redraw(); }
 });
 window.addEventListener("resize", redraw);
-if ("ResizeObserver" in window) new ResizeObserver(redraw).observe(gcv.parentElement);
+if ("ResizeObserver" in window) { const ro = new ResizeObserver(redraw); ro.observe(gcv.parentElement); ro.observe(gcv2.parentElement); }
 applyTheme(themePref); syncSlider(); setBtn(); draw();
 </script>
 </body>
