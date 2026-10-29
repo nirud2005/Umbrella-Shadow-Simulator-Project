@@ -24,6 +24,7 @@
   --grat: rgba(255, 255, 255, .28); --night: rgba(14, 22, 48, .50); --rim: rgba(14, 30, 70, .35);
   --star-o: 0; --seg-night: #d6d0bc;
   --stage: radial-gradient(90% 70% at 26% 62%, rgba(253, 236, 200, .95) 0%, rgba(241, 236, 220, 0) 72%), #f1ecdc;
+  --s: 1; --cv-w: 320px; --cv2-w: 380px; --drawer-w: 840px;
   --chev: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2363677a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
 }
 .rz[data-theme="dark"] {
@@ -133,14 +134,16 @@ form#f { display: contents; }
 .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 12px 28px; min-height: 72px; }
 .top .brand { display: flex; align-items: center; gap: 12px; }
 .top .tools { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-main { flex: 1; display: flex; flex-wrap: wrap; gap: 20px; padding: 0 28px 24px; min-height: 0; }
-.globe { flex: 58 1 560px; min-width: 0; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: var(--r-shell); border: 1px solid var(--line); background: var(--stage); box-shadow: var(--shadow-card); }
-.stage { width: min(100%, calc(100vh - 130px)); aspect-ratio: 1; }
+main { flex: 1; display: flex; flex-wrap: wrap; gap: 20px; padding: 0 28px 24px; min-height: 0; align-items: flex-start; }
+.leftcol { flex: 58 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.globe { flex: none; min-width: 0; position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 14px; padding: 24px 28px 20px; overflow: hidden; border-radius: var(--r-shell); border: 1px solid var(--line); background: var(--stage); box-shadow: var(--shadow-card); }
+.stage { width: min(100%, max(340px, calc(100vh - 300px))); aspect-ratio: 1; align-self: center; }
 .stage canvas { display: block; width: 100%; height: 100%; }
-.g-l { position: absolute; left: 32px; top: 28px; max-width: 360px; }
-.g-r { position: absolute; right: 32px; top: 28px; text-align: right; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.g-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 8px 24px; }
+.g-l { flex: 1 1 280px; min-width: 0; }
+.g-r { flex: 0 1 auto; text-align: right; font-size: 13.5px; font-weight: 600; color: var(--ink); }
 .g-r b { font-size: 16px; color: var(--ink); }
-.legend { position: absolute; left: 24px; bottom: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; padding: 10px 20px; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); box-shadow: var(--shadow-sm); font-size: 13.5px; font-weight: 600; }
+.legend { align-self: flex-start; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; padding: 10px 20px; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); box-shadow: var(--shadow-sm); font-size: 13.5px; font-weight: 600; }
 .legend span { display: inline-flex; align-items: center; gap: 8px; }
 aside.side { flex: 42 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
 .c-play { background: var(--a50); border-color: var(--a200); gap: 14px; }
@@ -152,7 +155,7 @@ aside.side { flex: 42 1 480px; min-width: 0; display: flex; flex-direction: colu
 /* drawer ข้อมูลเชิงลึก */
 #drawer { position: fixed; inset: 0; z-index: 20; }
 #drawer .back { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; cursor: default; background: rgba(23, 26, 34, .5); }
-#drawer aside { position: absolute; top: 16px; right: 16px; bottom: 16px; width: min(840px, calc(100% - 32px)); display: flex; flex-direction: column; overflow: hidden; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-shell); box-shadow: var(--shadow-card); }
+#drawer aside { position: absolute; top: 16px; right: 16px; bottom: 16px; width: min(var(--drawer-w), calc(100% - 32px)); display: flex; flex-direction: column; overflow: hidden; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-shell); box-shadow: var(--shadow-card); }
 .d-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 28px 12px; }
 .d-body { flex: 1; min-height: 0; overflow: auto; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 24px 32px; padding: 8px 28px 28px; }
 details.adv { border: 1px solid var(--line); border-radius: 18px; padding: 12px 16px; background: var(--paper-2); }
@@ -161,13 +164,11 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
 @media (max-width: 1060px) {
   .top { padding: 12px 16px; }
   main { flex-direction: column; flex-wrap: nowrap; gap: 12px; padding: 0 16px 24px; }
-  aside.side { display: contents; }
-  .globe { order: 0; flex: none; flex-direction: column; align-items: stretch; padding: 16px 16px 12px; }
-  .c-play { order: 1; } .c-out { order: 2; } .c-loc { order: 3; } .c-time { order: 4; }
+  .leftcol, aside.side { display: contents; }
+  .c-loc { order: 0; } .globe { order: 1; padding: 16px 16px 12px; } .c-time { order: 2; } .c-umb { order: 3; } .c-play { order: 4; } .c-out { order: 5; }
   .stage { width: 100%; }
-  .g-l, .g-r, .legend { position: static; max-width: none; text-align: left; }
-  .g-r { margin-top: 4px; }
-  .legend { margin-top: 4px; border-radius: 20px; }
+  .g-r { text-align: left; }
+  .legend { border-radius: 20px; }
   .card { padding: 16px; }
 }
 @media (max-width: 560px) {
@@ -180,6 +181,29 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
 @media (max-width: 700px) {
   #drawer aside { top: auto; left: 0; right: 0; bottom: 0; width: auto; max-height: 88vh; border-radius: var(--r-shell) var(--r-shell) 0 0; }
   .d-head, .d-body { padding-left: 20px; padding-right: 20px; }
+}
+
+/* ขนาดหน้าจอ: ปกติ (ค่าเดิม) / ใหญ่ / ใหญ่มาก */
+.tile .v { overflow-wrap: anywhere; }
+.rz[data-size="lg"] { --s: 1.2; --cv-w: 420px; --cv2-w: 480px; --drawer-w: 1100px; }
+.rz[data-size="xl"] { --s: 1.45; --cv-w: 520px; --cv2-w: 600px; --drawer-w: 1400px; }
+.rz:is([data-size="lg"], [data-size="xl"]) { font-size: calc(14.5px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) :is(.cap, .tile .k, .tile .s) { font-size: calc(12.5px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) :is(.field > span, .btn-sm, .chip, .seg label > span, .gh, .legend, #err, .g-r) { font-size: calc(13.5px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) :is(.h, .g-r b) { font-size: calc(16px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) :is(.in, .btn, .tile .u, details.adv summary) { font-size: calc(14.5px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) .btn-lg { font-size: calc(16px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) .row dt { font-size: calc(14px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) .tile .v { font-size: calc(26px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) :is(.in, .btn) { height: calc(44px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) :is(.btn-sm, .chip, .seg label > span) { height: calc(40px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) .btn-lg { height: calc(56px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) .btn-icon { width: calc(44px * var(--s)); }
+.rz:is([data-size="lg"], [data-size="xl"]) .btn-icon.btn-lg { width: calc(56px * var(--s)); }
+.c-out .res { flex-direction: column; }
+@media (min-width: 1061px) {
+  .rz:is([data-size="lg"], [data-size="xl"]) .leftcol { flex-grow: 44; }
+  .rz:is([data-size="lg"], [data-size="xl"]) aside.side { flex-grow: 56; }
 }
 </style>
 </head>
@@ -198,6 +222,12 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
   </div>
   <div class="tools">
     <button id="link" type="button" class="btn btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></svg><span class="lbl">คัดลอกลิงก์</span></button>
+    <span class="cap">ขนาดหน้าจอ</span>
+    <div class="seg" role="radiogroup" aria-label="ขนาดหน้าจอ">
+      <label><input type="radio" name="size" value="md" checked><span>ปกติ</span></label>
+      <label><input type="radio" name="size" value="lg"><span>ใหญ่</span></label>
+      <label><input type="radio" name="size" value="xl"><span>ใหญ่มาก</span></label>
+    </div>
     <div class="seg" role="radiogroup" aria-label="ธีมสี">
       <label><input type="radio" name="theme" value="auto" checked><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 000 18z" fill="currentColor"/></svg><span class="lbl">อัตโนมัติ</span></span></label>
       <label><input type="radio" name="theme" value="light"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="lbl">สว่าง</span></span></label>
@@ -207,13 +237,29 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
 </header>
 
 <main>
+  <div class="leftcol">
+  <section class="card c-loc" aria-labelledby="h-loc">
+    <h2 class="h" id="h-loc">สถานที่</h2>
+    <div style="display:flex;align-items:flex-end;gap:12px">
+      <label class="field" style="flex:1"><span>จังหวัด</span><select id="country" class="in"></select></label>
+      <button id="here" type="button" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span class="lbl2">ตำแหน่งของฉัน</span></button>
+    </div>
+    <div class="grid3">
+      <label class="field"><span>ละติจูด (°N)</span><input id="lat" class="in" type="number" step="any" min="-90" max="90" value="13.75" required></label>
+      <label class="field"><span>ลองจิจูด (°E)</span><input id="lon" class="in" type="number" step="any" min="-180" max="180" value="100.50" required></label>
+      <label class="field"><span>เขตเวลา (UTC+)</span><input id="tz" class="in" type="number" step="0.25" min="-12" max="14" value="7" required></label>
+    </div>
+  </section>
+
   <section class="globe" aria-label="ลูกโลก">
+    <div class="g-top">
     <div class="g-l">
       <h2 style="font-size:18px;font-weight:700;line-height:1.35">ดวงอาทิตย์อยู่เหนือจุดไหนของโลก</h2>
       <p style="font-size:13.5px;font-weight:500;color:var(--ink)">มองจากเหนือตำแหน่งของคุณ ด้านกลางคืนเงาลงเป็นสีเข้ม</p>
       <p id="gnote" class="cap" style="margin-top:8px;line-height:1.5;font-weight:600"></p>
     </div>
     <p id="gi" class="g-r"></p>
+    </div>
     <div class="stage"><canvas id="gl" role="img" aria-label="ลูกโลกมองจากเหนือตำแหน่งของคุณ แสดงด้านกลางวันและกลางคืน ตำแหน่งของผู้ใช้ และจุดที่ดวงอาทิตย์อยู่เหนือศีรษะ"></canvas></div>
     <div class="legend">
       <span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" stroke-width="2.5" style="fill:var(--a500);stroke:var(--paper)"/></svg>คุณอยู่ที่นี่</span>
@@ -222,21 +268,9 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
       <span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" rx="4" stroke-width="1.5" style="fill:var(--ink-deep);fill-opacity:.55;stroke:var(--line)"/></svg>กลางคืน</span>
     </div>
   </section>
+  </div>
 
   <aside class="side" aria-label="การตั้งค่าและผลลัพธ์">
-    <section class="card c-loc" aria-labelledby="h-loc">
-      <h2 class="h" id="h-loc">สถานที่</h2>
-      <div style="display:flex;align-items:flex-end;gap:12px">
-        <label class="field" style="flex:1"><span>จังหวัด</span><select id="country" class="in"></select></label>
-        <button id="here" type="button" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span class="lbl2">ตำแหน่งของฉัน</span></button>
-      </div>
-      <div class="grid3">
-        <label class="field"><span>ละติจูด (°N)</span><input id="lat" class="in" type="number" step="any" min="-90" max="90" value="13.75" required></label>
-        <label class="field"><span>ลองจิจูด (°E)</span><input id="lon" class="in" type="number" step="any" min="-180" max="180" value="100.50" required></label>
-        <label class="field"><span>เขตเวลา (UTC+)</span><input id="tz" class="in" type="number" step="0.25" min="-12" max="14" value="7" required></label>
-      </div>
-    </section>
-
     <section class="card c-time" aria-labelledby="h-time">
       <h2 class="h" id="h-time">วันและเวลา</h2>
       <div class="grid2">
@@ -248,12 +282,21 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
         <div class="cap" style="display:flex;justify-content:space-between;padding:0 2px"><span>00:00</span><span id="sunt"></span><span>24:00</span></div>
       </div>
       <div id="chips" style="display:flex;flex-wrap:wrap;gap:8px">
-        <button type="button" class="chip" data-md="3-20">วสันตวิษุวัต</button>
-        <button type="button" class="chip" data-md="6-21">ครีษมายัน</button>
-        <button type="button" class="chip" data-md="9-23">ศารทวิษุวัต</button>
-        <button type="button" class="chip" data-md="12-21">เหมายัน</button>
+        <button type="button" class="chip" data-ev="0">วสันตวิษุวัต</button>
+        <button type="button" class="chip" data-ev="1">ครีษมายัน</button>
+        <button type="button" class="chip" data-ev="2">ศารทวิษุวัต</button>
+        <button type="button" class="chip" data-ev="3">เหมายัน</button>
         <button id="now" type="button" class="chip" style="margin-left:auto;color:var(--a500)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>ตอนนี้ที่นี่</button>
       </div>
+    </section>
+
+    <section class="card c-umb" aria-labelledby="h-umb">
+      <h2 class="h" id="h-umb">ขนาดร่ม</h2>
+      <div class="grid2">
+        <label class="field"><span>รัศมีร่ม R (เมตร)</span><input id="R" class="in" type="number" step="any" min="0.1" value="2" required></label>
+        <label class="field"><span>ความสูงร่ม h (เมตร)</span><input id="h" class="in" type="number" step="any" min="0.1" value="5" required></label>
+      </div>
+      <p class="cap" style="line-height:1.55;font-weight:500">รัศมี R = ครึ่งหนึ่งของความกว้างผืนร่ม · ความสูง h = วัดจากพื้นถึงผืนร่ม · แก้ค่าแล้วกราฟเปลี่ยนทันที</p>
     </section>
 
     <section class="card c-play" aria-label="ควบคุมการเล่น">
@@ -261,7 +304,7 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
         <label><input type="radio" name="mode" value="static" checked><span>ดู ณ เวลาที่กำหนด</span></label>
         <label><input type="radio" name="mode" value="anim"><span>Animation ตลอดวัน (พระอาทิตย์ขึ้น–ตก)</span></label>
       </div>
-      <p class="cap" style="line-height:1.55;font-weight:500">กดเล่นแล้ว <b>ลูกโลก</b> จะเดินตั้งแต่พระอาทิตย์ขึ้นจนตก (ทั้งวัน) ส่วน <b>กราฟเงา</b> ด้านล่างแสดงเฉพาะช่วง <b>07:00–17:00 น.</b> — นอกช่วงนี้กราฟจะหยุดค้างไว้</p>
+      <p class="cap" style="line-height:1.55;font-weight:500">กดเล่นแล้ว <b>ลูกโลก</b> และ <b>กราฟเงา</b> จะเดินพร้อมกันตั้งแต่พระอาทิตย์ขึ้นจนตก <span id="sunline" style="font-weight:700;color:var(--ink)"></span></p>
       <div class="flexrow">
         <button id="go" type="button" class="btn btn-primary btn-lg" style="flex:1 1 200px"></button>
         <button id="restart" type="button" class="btn btn-lg btn-icon" aria-label="เริ่มใหม่"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 109-9 9 9 0 00-6.4 2.7L3 8"/><path d="M3 3v5h5"/></svg></button>
@@ -279,7 +322,7 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
       <p id="rng" class="cap" style="line-height:1.5;font-weight:600"></p>
       <div class="res" style="display:flex;align-items:stretch;gap:16px">
         <div id="out" style="flex:1;min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px"></div>
-        <div id="cv" style="width:196px;flex:none;align-self:center"></div>
+        <div id="cv" style="width:var(--cv-w);max-width:100%;flex:none;align-self:center"></div>
       </div>
     </section>
   </aside>
@@ -298,15 +341,8 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
     <div class="d-body">
       <div id="ins-rows" style="flex:1 1 360px;min-width:0;display:flex;flex-direction:column;gap:20px"></div>
       <div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:16px">
-        <div id="cv2" style="width:100%;max-width:380px;align-self:center"></div>
+        <div id="cv2" style="width:100%;max-width:var(--cv2-w);align-self:center"></div>
         <p class="cap" style="font-weight:500;text-align:center">มองจากด้านบน · เหนืออยู่บน · วงขาว = ร่ม · วงทึบ = เงา</p>
-        <details class="adv" open>
-          <summary>ตั้งค่าร่ม (ขั้นสูง)</summary>
-          <div class="grid2" style="padding-top:10px">
-            <label class="field"><span>รัศมีร่ม R (m)</span><input id="R" class="in" type="number" step="any" min="0.1" value="2" required style="background:var(--paper)"></label>
-            <label class="field"><span>ความสูงร่ม h (m)</span><input id="h" class="in" type="number" step="any" min="0.1" value="5" required style="background:var(--paper)"></label>
-          </div>
-        </details>
       </div>
     </div>
   </aside>
@@ -328,8 +364,10 @@ const mode = () => document.querySelector("input[name=mode]:checked").value;
 const wrap = (x) => ((((x + 180) % 360) + 360) % 360) - 180;
 const cssv = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 let timer = null, clock = 7, bound = null, finished = false, last = null;
+let started = false; // true = Animation เริ่มเล่นแล้ว (กดหยุดแล้วเล่นต่อได้)
 let span = { a: 7, b: 17 }; // ช่วงเวลาที่ Animation เล่น (เวลานาฬิกา) = พระอาทิตย์ขึ้น → ตก
-const SHADOW_FROM = 7, SHADOW_TO = 17; // กราฟเงา (ขวา) แสดงเฉพาะช่วงนี้ตอนเล่น Animation
+const SCALE_FROM = 7, SCALE_TO = 17; // ใช้กำหนดสเกลแกนของกราฟเงาเท่านั้น (ไม่ใช่ช่วงเวลาที่แสดง)
+const SUN_H0 = -0.833; // มุมเงยของศูนย์กลางดวงอาทิตย์ตอนขึ้น/ตก (ขอบบนพ้นขอบฟ้า + การหักเหแสง) เท่ากับที่แอปสภาพอากาศใช้
 const STEP_H = 0.04; // ชั่วโมงต่อเฟรม (ทุก 25 มิลลิวินาที) ที่ความเร็ว ×1
 
 /* ---------- ธีม สว่าง/มืด/อัตโนมัติ ---------- */
@@ -341,6 +379,15 @@ function applyTheme(pref) {
 let themePref = "auto";
 try { themePref = localStorage.getItem("theme") || "auto"; } catch {}
 document.querySelector(`input[name=theme][value=${themePref}]`).checked = true;
+let sizePref = "md"; try { sizePref = localStorage.getItem("size") || "md"; } catch {}
+if (!["md", "lg", "xl"].includes(sizePref)) sizePref = "md";
+document.querySelector(`input[name=size][value=${sizePref}]`).checked = true;
+document.documentElement.dataset.size = sizePref;
+document.querySelectorAll("input[name=size]").forEach((e) => (e.onchange = () => {
+  sizePref = e.value; try { localStorage.setItem("size", sizePref); } catch {}
+  document.documentElement.dataset.size = sizePref;
+  redraw();
+}));
 document.querySelectorAll("input[name=theme]").forEach((e) => (e.onchange = () => {
   themePref = e.value; try { localStorage.setItem("theme", themePref); } catch {}
   applyTheme(themePref);
@@ -373,7 +420,7 @@ function dayBound(p) {
 // เวลาแสงขึ้น/ตก (เวลานาฬิกา) ใช้ระบายแถบเลื่อนเวลา
 function sunTimes(p) {
   const r = calc(p, 12);
-  const x = -Math.tan(rad(p.lat)) * Math.tan(rad(r.delta));
+  const x = (Math.sin(rad(SUN_H0)) - Math.sin(rad(p.lat)) * Math.sin(rad(r.delta))) / (Math.cos(rad(p.lat)) * Math.cos(rad(r.delta)));
   if (x >= 1) return { none: true };
   if (x <= -1) return { all: true };
   const w0 = deg(Math.acos(x)) / 15, off = (4 * (p.lon - p.std) + r.e) / 60;
@@ -383,11 +430,11 @@ function sunTimes(p) {
 // ช่วงเวลาของ Animation: พระอาทิตย์ขึ้น → ตก (ถ้าไม่ขึ้น/ไม่ตกทั้งวัน ใช้ค่าตามกรณี)
 function animSpan(p) {
   const s = sunTimes(p);
-  if (s.none) return { a: SHADOW_FROM, b: SHADOW_TO, none: true };
+  if (s.none) return { a: SCALE_FROM, b: SCALE_TO, none: true };
   if (s.all) return { a: 0, b: 24 };
   return { a: s.up, b: s.down };
 }
-const curSpan = () => ($("f").checkValidity() ? animSpan(parseInputs()) : { a: SHADOW_FROM, b: SHADOW_TO });
+const curSpan = () => ($("f").checkValidity() ? animSpan(parseInputs()) : { a: SCALE_FROM, b: SCALE_TO });
 const tIn = (h) => hm(Math.min(h, 23.98)); // ค่าใส่ช่องเวลา (ห้ามเป็น 24:00)
 
 function sunTrack(p) {
@@ -403,28 +450,50 @@ function sunTrack(p) {
 function diagram(p, r, B, big) {
   const S = 176 / B, c = 200, Rp = p.R * S;
   const lab = Rp >= 34 ? 24 : Rp >= 20 ? 16 : 0;
-  let s = `<svg viewBox="0 0 400 400" style="display:block;width:100%;height:auto" role="img" aria-label="กราฟเงามองจากด้านบน ทิศเหนืออยู่ด้านบน ${r.sunUp ? `เงาอยู่ทาง${r.dirName} ห่าง ${r.d.toFixed(2)} เมตร` : "ไม่มีเงาเพราะดวงอาทิตย์อยู่ใต้ขอบฟ้า"}">
+  const cid = big ? "clipB" : "clipA";
+  let s = `<svg viewBox="0 0 400 470" style="display:block;width:100%;height:auto" role="img" aria-label="กราฟเงามองจากด้านบน ทิศเหนืออยู่ด้านบน ${r.sunUp ? `เงาอยู่ทาง${r.dirName} ห่าง ${r.d.toFixed(2)} เมตร พิกัด (${r.xc.toFixed(2)}, ${r.yc.toFixed(2)}) เมตร` : r.alpha > SUN_H0 ? "ดวงอาทิตย์อยู่ที่ขอบฟ้า เงายาวมากจนไม่แสดง" : "ไม่มีเงาเพราะดวงอาทิตย์อยู่ใต้ขอบฟ้า"}">
+<defs><clipPath id="${cid}"><circle cx="200" cy="200" r="190"/></clipPath></defs>
 <circle cx="200" cy="200" r="192" stroke-width="2" style="fill:var(--paper-2);stroke:var(--line)"/>
 <circle cx="200" cy="200" r="88" fill="none" stroke-width="1.5" stroke-dasharray="4 7" stroke-opacity=".6" style="stroke:var(--ink-faint)"/>
 <circle cx="200" cy="200" r="176" fill="none" stroke-width="1.5" stroke-dasharray="4 7" stroke-opacity=".6" style="stroke:var(--ink-faint)"/>
 <line x1="200" y1="40" x2="200" y2="360" stroke-width="1.5" stroke-opacity=".5" style="stroke:var(--ink-faint)"/>
 <line x1="40" y1="200" x2="360" y2="200" stroke-width="1.5" stroke-opacity=".5" style="stroke:var(--ink-faint)"/>
 ${[["N", 200, 36], ["E", 371, 209], ["S", 200, 381], ["W", 29, 209]].map(([t, x, y]) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="26" font-weight="700" style="fill:var(--ink-soft)">${t}</text>`).join("")}`;
+  let after = "";
   if (r.sunUp) {
     const az = rad(r.psiSun), ux = Math.sin(az), uy = -Math.cos(az);
     const sx = c + 140 * ux, sy = c + 140 * uy;
     const sh = [c + r.xc * S, c - r.yc * S];
+    const dpx = Math.hypot(sh[0] - c, sh[1] - c) || 1, far = dpx > 176; // far = จุดกึ่งกลางเงาอยู่นอกกรอบกราฟ
+    const dx = (sh[0] - c) / dpx, dy = (sh[1] - c) / dpx;
+    const mid = far ? [c + 88 * dx, c + 88 * dy] : [(c + sh[0]) / 2, (c + sh[1]) / 2];
     s += `<line x1="${c + (Rp + 8) * ux}" y1="${c + (Rp + 8) * uy}" x2="${sx - 32 * ux}" y2="${sy - 32 * uy}" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="1 10" style="stroke:var(--sun)"/>
 <g transform="translate(${sx} ${sy})"><g stroke-width="3" stroke-linecap="round" style="stroke:var(--sun)">${[0, 45, 90, 135, 180, 225, 270, 315].map((a) => `<line y1="-21" y2="-29" transform="rotate(${a})"/>`).join("")}</g><circle r="14" stroke-width="3" style="fill:var(--sun);stroke:var(--paper-2)"/></g>
+<g clip-path="url(#${cid})">
 <circle cx="${sh[0]}" cy="${sh[1]}" r="${Rp}" stroke-width="3" stroke-dasharray="7 6" style="fill:var(--ink);fill-opacity:.28;stroke:var(--ink)"/>
-${lab ? `<text x="${sh[0]}" y="${sh[1] + lab / 3}" text-anchor="middle" font-size="${lab}" font-weight="700" style="fill:var(--ink)">เงา</text>` : ""}
+${lab ? `<text x="${sh[0]}" y="${sh[1] + lab * 1.05 + 4}" text-anchor="middle" font-size="${lab}" font-weight="700" style="fill:var(--ink)">เงา</text>` : ""}
 <line x1="200" y1="200" x2="${sh[0]}" y2="${sh[1]}" stroke-width="3" stroke-dasharray="6 6" style="stroke:var(--ink)"/>
-<text x="${(200 + sh[0]) / 2 - 10 * Math.sign(uy || 1)}" y="${(200 + sh[1]) / 2 - 8}" text-anchor="middle" font-size="22" font-weight="700" style="fill:var(--ink)">d</text>`;
+</g>
+<text x="${mid[0] - 10 * Math.sign(uy || 1)}" y="${mid[1] - 8}" text-anchor="middle" font-size="22" font-weight="700" style="fill:var(--ink)">d</text>`;
+    // จุดกึ่งกลางเงา (หรือลูกศรที่ขอบถ้าเงาอยู่ไกลเกินกรอบ)
+    if (far) {
+      const bx = c + 168 * dx, by = c + 168 * dy, nx = -dy * 10, ny = dx * 10;
+      after += `<polygon points="${c + 188 * dx},${c + 188 * dy} ${bx + nx},${by + ny} ${bx - nx},${by - ny}" stroke-width="2" stroke-linejoin="round" style="fill:var(--a500);stroke:var(--paper)"/>`;
+    } else {
+      after += `<circle cx="${sh[0]}" cy="${sh[1]}" r="${big ? 5 : 7}" stroke-width="2" style="fill:var(--a500);stroke:var(--paper)"/>`;
+    }
+    if (far) after += `<text x="200" y="352" text-anchor="middle" font-size="17" font-weight="700" stroke-width="4" paint-order="stroke" style="fill:var(--a500);stroke:var(--paper-2)">เงาอยู่นอกกรอบ ดูตามลูกศร</text>`;
   } else {
-    s += `<text x="200" y="300" text-anchor="middle" font-size="22" font-weight="600" style="fill:var(--ink-soft)">ดวงอาทิตย์อยู่ใต้ขอบฟ้า</text>`;
+    s += `<text x="200" y="300" text-anchor="middle" font-size="20" font-weight="600" style="fill:var(--ink-soft)">${r.alpha > SUN_H0 ? "ดวงอาทิตย์อยู่ที่ขอบฟ้า เงายาวมาก" : "ดวงอาทิตย์อยู่ใต้ขอบฟ้า"}</text>`;
   }
+  // แถบพิกัดใต้กราฟ: พิกัดฉาก (x, y) และพิกัดเชิงขั้ว (d, ψ)
+  const l1 = r.sunUp ? `(x, y) = (${sg(r.xc)}, ${sg(r.yc)}) m` : "(x, y) = –";
+  const l2 = r.sunUp ? `d = ${f2(r.d)} m · ψ = ${f2(r.psiShadow, 1)}°` : "d = – · ψ = –";
+  after += `<rect x="14" y="408" width="372" height="56" rx="14" stroke-width="2" style="fill:var(--paper);stroke:var(--a500)"/>
+<text x="200" y="433" text-anchor="middle" font-size="20" font-weight="700" style="fill:var(--ink)">${l1}</text>
+<text x="200" y="456" text-anchor="middle" font-size="20" font-weight="700" style="fill:var(--ink)">${l2}</text>`;
   return s + `<circle cx="200" cy="200" r="${Rp}" stroke-width="4" style="fill:var(--paper);stroke:var(--a500)"/>
-${lab ? `<text x="200" y="${200 + lab / 3}" text-anchor="middle" font-size="${lab}" font-weight="700" style="fill:var(--a500)">ร่ม</text>` : ""}</svg>`;
+${lab ? `<text x="200" y="${200 + lab / 3}" text-anchor="middle" font-size="${lab}" font-weight="700" style="fill:var(--a500)">ร่ม</text>` : ""}${after}</svg>`;
 }
 
 /* ---------- แผงผลลัพธ์ + ข้อมูลเชิงลึก ---------- */
@@ -435,7 +504,7 @@ function panel(p, r) {
   $("out").innerHTML = `
 <div class="tile"><span class="k">มุมเงยดวงอาทิตย์ (α)</span><span class="v">${sg(r.alpha)}<span class="u">°</span></span></div>
 <div class="tile"><span class="k">เวลาสุริยะ (ST)</span><span class="v">${hm(r.st)}<span class="u">น.</span></span></div>
-<div class="tile"><span class="k">ทิศของเงา</span><span class="v">${up ? f2(r.psiShadow) : "–"}<span class="u">${up ? "°" : ""}</span></span><span class="s">${up ? r.dirName : "ไม่มีเงา"}</span></div>
+<div class="tile"><span class="k">ทิศของเงา</span><span class="v">${up ? f2(r.psiShadow) : "–"}<span class="u">${up ? "°" : ""}</span></span><span class="s">${up ? r.dirName : r.alpha > SUN_H0 ? "เงายาวมาก (ดวงอาทิตย์ที่ขอบฟ้า)" : "ไม่มีเงา"}</span></div>
 <div class="tile tile-hot"><span class="k">ระยะเงา (d)</span><span class="v">${up ? f2(r.d) : "–"}<span class="u">${up ? "เมตร" : ""}</span></span></div>`;
 
   const row = (k, sym, v) => `<div class="row"><dt>${k}</dt><dd>${sym ? `<span class="sym">${sym}</span>` : ""}${v}</dd></div>`;
@@ -541,14 +610,18 @@ function renderGlobe(p, r) {
 }
 
 /* ---------- ข้อความอธิบายให้ผู้ใช้ไม่สับสน ---------- */
-function notes(p, anim, t, tShadow, outside) {
+function notes(p, anim, t) {
   const s = sunTimes(p);
   $("gnote").textContent = s.none ? "วันนี้ที่นี่ดวงอาทิตย์ไม่ขึ้น จึงไม่มี Animation"
     : s.all ? "วันนี้ที่นี่ดวงอาทิตย์ไม่ตก · ลูกโลกจะเล่นครบ 24 ชั่วโมง"
     : `ลูกโลกเล่น Animation ตั้งแต่พระอาทิตย์ขึ้น ${hm(s.up)} ถึงตก ${hm(s.down)} น.`;
+  $("sunline").textContent = s.none ? "(วันนี้ที่นี่ดวงอาทิตย์ไม่ขึ้น จึงเล่นไม่ได้)"
+    : s.all ? "(วันนี้ที่นี่ดวงอาทิตย์ไม่ตก จึงเล่นครบ 24 ชั่วโมง)"
+    : `(วันนี้ที่นี่ ขึ้น ${hm(s.up)} น. · ตก ${hm(s.down)} น.)`;
   $("rng").textContent = !anim ? ""
-    : outside ? `ตอนนี้ ${hm(t)} น. อยู่นอกช่วง ${hm(SHADOW_FROM)}–${hm(SHADOW_TO)} น. กราฟเงาจึงหยุดค้างที่ ${hm(tShadow)} น. (ลูกโลกยังเล่นต่อ)`
-    : `กราฟเงาแสดงเฉพาะช่วง ${hm(SHADOW_FROM)}–${hm(SHADOW_TO)} น. · ตอนนี้ ${hm(t)} น.`;
+    : s.none ? ""
+    : s.all ? `ดวงอาทิตย์ไม่ตกวันนี้ · ตอนนี้ ${hm(t)} น.`
+    : `พระอาทิตย์ขึ้น ${hm(s.up)} น. · ตก ${hm(s.down)} น. · ตอนนี้ ${hm(t)} น.`;
 }
 
 /* ---------- วาด / เล่น ---------- */
@@ -557,17 +630,13 @@ function draw(clockHours, fixed) {
   const p = readInputs();
   if (!p) return false;
   const anim = clockHours !== undefined;
-  const t = clockHours ?? p.clock, rGlobe = calc(p, t);
-  // ตอนเล่น Animation: ลูกโลกใช้เวลาจริง แต่กราฟเงา/ตัวเลขแสดงเฉพาะ 07:00–17:00
-  const tShadow = anim ? Math.min(SHADOW_TO, Math.max(SHADOW_FROM, t)) : t;
-  const outside = anim && tShadow !== t;
-  const r = outside ? calc(p, tShadow) : rGlobe;
-  last = { p, r, t: tShadow };
+  const t = clockHours ?? p.clock, r = calc(p, t);
+  last = { p, r, t };
   const B = fixed ?? (anim ? dayBound(p) : Math.max(6, r.sunUp ? Math.abs(r.xc) + p.R + 3 : 0, r.sunUp ? Math.abs(r.yc) + p.R + 3 : 0, p.R + 3));
   panel(p, r);
   $("cv").innerHTML = diagram(p, r, B);
   $("cv2").innerHTML = diagram(p, r, B, true);
-  sunTrack(p); renderGlobe(p, rGlobe); notes(p, anim, t, tShadow, outside);
+  sunTrack(p); renderGlobe(p, r); notes(p, anim, t);
   return true;
 }
 const redraw = () => { if (!timer) draw(mode() === "anim" ? clock : undefined, mode() === "anim" ? bound : undefined); };
@@ -578,7 +647,7 @@ const ICON_STOP = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6"
 function setBtn() {
   const anim = mode() === "anim";
   $("time").disabled = $("tr").disabled = anim;
-  $("go").innerHTML = timer ? ICON_STOP + "หยุด" : ICON_PLAY + (finished ? "เล่นอีกครั้ง" : anim && clock > span.a + 1e-9 ? "เล่นต่อ" : "เล่น");
+  $("go").innerHTML = timer ? ICON_STOP + "หยุด" : ICON_PLAY + (finished ? "เล่นอีกครั้ง" : anim && started && clock > span.a + 1e-9 ? "เล่นต่อ" : "เล่น");
 }
 function stop() { clearInterval(timer); timer = null; }
 function setMode(v) { document.querySelector(`input[name=mode][value=${v}]`).checked = true; }
@@ -589,7 +658,8 @@ function play(restart) {
   const sp = animSpan(p);
   if (sp.none) { const e = $("err"); e.textContent = "วันนี้ที่นี่ดวงอาทิตย์ไม่ขึ้น จึงเล่น Animation ไม่ได้"; e.hidden = false; return; }
   span = sp; bound = dayBound(p);
-  if (restart || finished || clock < span.a - 1e-9 || clock > span.b) { clock = span.a; finished = false; }
+  if (restart || finished || !started || clock < span.a - 1e-9 || clock > span.b) { clock = span.a; finished = false; }
+  started = true;
   const step = () => {
     $("time").value = tIn(clock); syncSlider();
     draw(clock, bound);
@@ -604,7 +674,7 @@ $("go").onclick = () => {
 };
 $("restart").onclick = () => { setMode("anim"); play(true); };
 document.querySelectorAll("input[name=mode]").forEach((e) => (e.onchange = () => {
-  stop(); span = curSpan(); clock = span.a; finished = false; bound = null;
+  stop(); span = curSpan(); clock = span.a; finished = false; started = false; bound = null;
   if (mode() === "anim") { $("time").value = tIn(clock); syncSlider(); }
   setBtn(); draw(mode() === "anim" ? clock : undefined);
 }));
@@ -637,7 +707,7 @@ $("country").value = String(PLACES.findIndex((p) => p[0] === "กรุงเท
 const setCustom = () => ($("country").value = "-1");
 
 function afterChange() { // ค่าเปลี่ยนจากปุ่ม/รายการ: หยุดแล้ววาดใหม่
-  stop(); finished = false; span = curSpan(); clock = span.a; bound = null;
+  stop(); finished = false; started = false; span = curSpan(); clock = span.a; bound = null;
   if (mode() === "anim") { $("time").value = tIn(clock); syncSlider(); }
   setBtn(); draw(mode() === "anim" ? clock : undefined);
 }
@@ -666,9 +736,25 @@ $("now").onclick = () => { // เวลาปัจจุบัน ณ เขต
   $("time").value = `${pad(t.getUTCHours())}:${pad(t.getUTCMinutes())}`;
   setMode("static"); syncSlider(); afterChange();
 };
-document.querySelectorAll("#chips [data-md]").forEach((b) => (b.onclick = () => {
-  const [m, d] = b.dataset.md.split("-");
-  $("date").value = `${$("date").value.slice(0, 4)}-${pad(m)}-${pad(d)}`;
+/* วันวิษุวัต/อายัน คำนวณตามปีที่เลือก (สูตรของ Meeus) คืนเวลา UTC เป็นมิลลิวินาที — k: 0=วสันตวิษุวัต 1=ครีษมายัน 2=ศารทวิษุวัต 3=เหมายัน */
+const SEASON_A = [485,203,199,182,156,136,77,74,70,58,52,50,45,44,29,18,17,16,14,12,12,12,9,8];
+const SEASON_B = [324.96,337.23,342.08,27.85,73.14,171.52,222.54,296.72,243.58,119.81,297.17,21.02,247.54,325.15,60.93,155.12,288.79,198.04,199.76,95.39,287.11,320.81,227.73,15.45];
+const SEASON_C = [1934.136,32964.467,20.186,445267.112,45036.886,22518.443,65928.934,3034.906,9037.513,33718.147,150.678,2281.226,29929.562,31555.956,4443.417,67555.328,4562.452,62894.029,31436.921,14577.848,31931.756,34777.259,1222.114,16859.074];
+const SEASON_P = [[2451623.80984, 365242.37404, 0.05169, -0.00411, -0.00057], [2451716.56767, 365241.62603, 0.00325, 0.00888, -0.0003],
+  [2451810.21715, 365242.01767, -0.11575, 0.00337, 0.00078], [2451900.05952, 365242.74049, -0.06223, -0.00823, 0.00032]];
+function seasonUTC(year, k) {
+  const Y = (year - 2000) / 1000, q = SEASON_P[k];
+  const jde0 = q[0] + Y * (q[1] + Y * (q[2] + Y * (q[3] + Y * q[4])));
+  const T = (jde0 - 2451545.0) / 36525, W = (35999.373 * T - 2.47) * Math.PI / 180;
+  const dl = 1 + 0.0334 * Math.cos(W) + 0.0007 * Math.cos(2 * W);
+  let S = 0; for (let i = 0; i < 24; i++) S += SEASON_A[i] * Math.cos((SEASON_B[i] + SEASON_C[i] * T) * Math.PI / 180);
+  const jde = jde0 + 0.00001 * S / dl;               // เวลา TT
+  return (jde - 2440587.5) * 864e5 - 69 * 1e3;       // → UTC (หัก ΔT ≈ 69 วินาที)
+}
+document.querySelectorAll("#chips [data-ev]").forEach((b) => (b.onclick = () => {
+  const y = +$("date").value.slice(0, 4) || new Date().getFullYear();
+  const t = new Date(seasonUTC(y, +b.dataset.ev) + (+$("tz").value || 7) * 36e5); // เวลาท้องถิ่น (อ่านด้วย UTC เพื่อไม่ให้เบราว์เซอร์บวกเขตเวลาซ้ำ)
+  $("date").value = `${t.getUTCFullYear()}-${pad(t.getUTCMonth() + 1)}-${pad(t.getUTCDate())}`;
   afterChange();
 }));
 
@@ -703,9 +789,10 @@ document.querySelector("#drawer .back").onclick = closeDrawer;
 document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("drawer").hidden) closeDrawer(); });
 
 $("f").addEventListener("input", (e) => {
-  if (e.target.name === "theme" || e.target.name === "mode") return;
+  if (e.target.name === "theme" || e.target.name === "mode" || e.target.name === "size") return;
   if (e.target.id !== "tr") syncSlider();
-  if (!timer && mode() === "static") draw();
+  if (timer) { if ($("f").checkValidity()) bound = dayBound(parseInputs()); }
+  else { bound = null; redraw(); }
 });
 window.addEventListener("resize", redraw);
 if ("ResizeObserver" in window) new ResizeObserver(redraw).observe(gcv.parentElement);
