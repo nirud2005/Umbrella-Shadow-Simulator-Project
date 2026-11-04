@@ -849,7 +849,9 @@ $("here").onclick = () => {
   if (!navigator.geolocation) return fail("เบราว์เซอร์นี้ไม่รองรับการหาตำแหน่ง");
   navigator.geolocation.getCurrentPosition((pos) => {
     $("lat").value = pos.coords.latitude.toFixed(2); $("lon").value = pos.coords.longitude.toFixed(2);
-    $("tz").value = Math.round((-new Date().getTimezoneOffset() / 60) * 4) / 4;
+    // ถ้าตำแหน่งอยู่ในประเทศไทย ใช้เวลาประเทศไทย (UTC+7) เสมอ ไม่ขึ้นกับนาฬิกาของเครื่อง
+    const inTH = pos.coords.latitude > 5.5 && pos.coords.latitude < 20.5 && pos.coords.longitude > 97.3 && pos.coords.longitude < 105.7;
+    $("tz").value = inTH ? 7 : Math.round((-new Date().getTimezoneOffset() / 60) * 4) / 4;
     setCustom(); afterChange();
   }, () => fail("หาตำแหน่งไม่ได้ (ไม่ได้อนุญาตหรือไม่มีสัญญาณ) เลือกประเทศหรือกรอกเองได้"));
 };
