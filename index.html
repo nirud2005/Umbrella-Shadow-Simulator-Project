@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>พิกัดเงาบนระนาบ</title>
-<meta name="description" content="จำลองตำแหน่งเงาของร่มแนวระนาบตามดวงอาทิตย์ พร้อมลูกโลกแสดงจุดที่ดวงอาทิตย์อยู่เหนือศีรษะ">
+<meta name="description" content="จำลองตำแหน่งเงาของร่มสนามตามดวงอาทิตย์ พร้อมลูกโลกแสดงจุดที่ดวงอาทิตย์อยู่เหนือศีรษะ">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -246,7 +246,7 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect width="40" height="40" rx="13" style="fill: var(--a50)"/><path d="M8 21a12 12 0 0124 0z" stroke-width="2.5" stroke-linejoin="round" style="stroke: var(--a500)"/><path d="M20 21v7.5a2.5 2.5 0 005 0" stroke-width="2.5" stroke-linecap="round" style="stroke: var(--a500)"/></svg>
     <div>
       <h1 style="font-size:18px;font-weight:700;line-height:1.3">พิกัดเงาบนระนาบ</h1>
-      <p class="cap" style="font-weight:500">จำลองตำแหน่งเงาของร่มแนวระนาบตามดวงอาทิตย์</p>
+      <p class="cap" style="font-weight:500">จำลองตำแหน่งเงาของร่มสนามตามดวงอาทิตย์</p>
     </div>
   </div>
   <div class="tools">
@@ -297,8 +297,8 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
     <section class="card c-umb" aria-labelledby="h-umb">
       <h2 class="h" id="h-umb">ขนาดร่ม</h2>
       <div class="grid2">
-        <label class="field"><span>รัศมีร่ม R (เมตร)</span><input id="R" class="in" type="number" step="any" min="0.1" value="2" required></label>
-        <label class="field"><span>ความสูงร่ม h (เมตร)</span><input id="h" class="in" type="number" step="any" min="0.1" value="5" required></label>
+        <label class="field"><span>รัศมีร่ม R (เมตร)</span><input id="R" class="in" type="number" step="any" min="0.1" value="1" required></label>
+        <label class="field"><span>ความสูงร่ม h (เมตร)</span><input id="h" class="in" type="number" step="any" min="0.1" value="2" required></label>
       </div>
       <p class="cap" style="line-height:1.55;font-weight:500">รัศมี R = ครึ่งหนึ่งของความกว้างผืนร่ม · ความสูง h = วัดจากพื้นถึงผืนร่ม · แก้ค่าแล้วกราฟเปลี่ยนทันที</p>
     </section>
@@ -307,7 +307,7 @@ details.adv summary { cursor: pointer; font-weight: 700; font-size: 14.5px; min-
       <h2 class="h" id="h-time">วันและเวลา</h2>
       <div class="grid2">
         <label class="field"><span>วันที่</span><input id="date" class="in" type="date" value="2026-10-27" required></label>
-        <label class="field"><span>เวลานาฬิกา</span><input id="time" class="in" type="time" value="14:30" required></label>
+        <label class="field"><span>เวลานาฬิกา</span><input id="time" class="in" type="time" value="12:00" required></label>
       </div>
       <div>
         <label class="field"><span class="sr">เลื่อนเวลา</span><input id="tr" class="rng" type="range" min="0" max="1439" step="5" value="870"></label>
@@ -537,9 +537,9 @@ ${lab ? `<text x="${sh[0]}" y="${sh[1] + lab * 1.05 + 4}" text-anchor="middle" f
     s += `<text x="200" y="300" text-anchor="middle" font-size="20" font-weight="600" style="fill:var(--ink-soft)">${r.alpha > SUN_H0 ? "ดวงอาทิตย์อยู่ที่ขอบฟ้า เงายาวมาก" : "ดวงอาทิตย์อยู่ใต้ขอบฟ้า"}</text>`;
   }
   // แถบพิกัดใต้กราฟ: พิกัดฉาก (x, y) และพิกัดเชิงขั้ว (d, ψShadow)
-  const l1 = r.sunUp ? `(x, y) = (${sg(r.xc)}, ${sg(r.yc)}) m` : "(x, y) = –";
+  const l1 = r.sunUp ? `(x, y) = ${xyTxt(r)}` : "(x, y) = –";
   const PS = 'ψ<tspan font-size="13" dy="5">Shadow</tspan><tspan dy="-5">';
-  const l2 = r.sunUp ? `d = ${f2(r.d)} m · ${PS} = ${f2(r.psiShadow, 1)}°</tspan>` : `d = – · ${PS} = –</tspan>`;
+  const l2 = r.sunUp ? `d = ${dTxt(r)} · ${PS} = ${isTiny(r) ? "–" : f2(r.psiShadow, 1) + "°"}</tspan>` : `d = – · ${PS} = –</tspan>`;
   after += `<rect x="14" y="408" width="372" height="56" rx="14" stroke-width="2" style="fill:var(--paper);stroke:var(--a500)"/>
 <text x="200" y="433" text-anchor="middle" font-size="20" font-weight="700" style="fill:var(--ink)">${l1}</text>
 <text x="200" y="456" text-anchor="middle" font-size="20" font-weight="700" style="fill:var(--ink)">${l2}</text>`;
@@ -550,13 +550,19 @@ ${lab ? `<text x="200" y="${200 + lab / 3}" text-anchor="middle" font-size="${la
 /* ---------- แผงผลลัพธ์ + ข้อมูลเชิงลึก ---------- */
 const f2 = (v, n = 2) => v.toFixed(n);
 const sg = (v) => (v < 0 ? "−" : "") + Math.abs(v).toFixed(2);
+// เมื่อเงาอยู่ใกล้โคนเสามาก (d < 1 ซม. เช่น วันดวงอาทิตย์ตั้งฉาก/วันไร้เงา) แสดงเป็นมิลลิเมตร และไม่แสดงทิศของเงา (ไม่มีทิศที่มีความหมาย)
+const TINY = 0.01;
+const isTiny = (r) => r.sunUp && r.d < TINY;
+const sgmm = (v) => (v < 0 ? "−" : "") + Math.abs(v * 1000).toFixed(1);
+const xyTxt = (r) => (isTiny(r) ? `(${sgmm(r.xc)}, ${sgmm(r.yc)}) mm` : `(${sg(r.xc)}, ${sg(r.yc)}) m`);
+const dTxt = (r) => (isTiny(r) ? `${(r.d * 1000).toFixed(1)} mm` : `${f2(r.d)} m`);
 function tilesHTML(r) {
   const up = r.sunUp;
   return `
 <div class="tile"><span class="k">มุมเงยดวงอาทิตย์ (α)</span><span class="v">${sg(r.alpha)}<span class="u">°</span></span></div>
 <div class="tile"><span class="k">เวลาสุริยะ (ST)</span><span class="v">${hm(r.st)}<span class="u">น.</span></span></div>
-<div class="tile"><span class="k">ทิศของเงา (ψ<sub>Shadow</sub>)</span><span class="v">${up ? f2(r.psiShadow) : "–"}<span class="u">${up ? "°" : ""}</span></span><span class="s">${up ? r.dirName : r.alpha > SUN_H0 ? "เงายาวมาก (ดวงอาทิตย์ที่ขอบฟ้า)" : "ไม่มีเงา"}</span></div>
-<div class="tile tile-hot"><span class="k">ระยะเงา (d)</span><span class="v">${up ? f2(r.d) : "–"}<span class="u">${up ? "เมตร" : ""}</span></span></div>`;
+<div class="tile"><span class="k">ทิศของเงา (ψ<sub>Shadow</sub>)</span><span class="v">${up && !isTiny(r) ? f2(r.psiShadow) : "–"}<span class="u">${up && !isTiny(r) ? "°" : ""}</span></span><span class="s">${isTiny(r) ? "ไม่มีทิศ (เงาอยู่ที่โคนเสา)" : up ? r.dirName : r.alpha > SUN_H0 ? "เงายาวมาก (ดวงอาทิตย์ที่ขอบฟ้า)" : "ไม่มีเงา"}</span></div>
+<div class="tile tile-hot"><span class="k">ระยะเงา (d)</span><span class="v">${up ? (isTiny(r) ? (r.d * 1000).toFixed(1) : f2(r.d)) : "–"}<span class="u">${up ? (isTiny(r) ? "มิลลิเมตร" : "เมตร") : ""}</span></span></div>`;
 }
 function panel(p, r) {
   const up = r.sunUp;
@@ -569,9 +575,9 @@ function panel(p, r) {
 ${row("วันลำดับที่ในปี", "n", r.n)}${row("เวลาสุริยะ", "ST", hm(r.st) + " น.")}${row("เดคลิเนชัน", "δ", sg(r.delta) + "°")}
 ${row("มุมชั่วโมง", "ω", sg(r.omega) + "°")}${row("มุมเงย", "α", sg(r.alpha) + "°")}${row("ทิศของดวงอาทิตย์", "ψ<sub>Sun</sub>", dash(f2(r.psiSun) + "°"))}</dl>
 <dl><h3 class="gh">เงาและร่ม</h3>
-${row("ทิศของเงา", "ψ<sub>Shadow</sub>", dash(f2(r.psiShadow) + "° (" + r.dirName + ")"))}${row("มุมจากแนวดิ่ง", "θ", f2(r.theta) + "°")}
-${row("ระยะเงา", "d", dash(f2(r.d) + " m"))}${row("พื้นที่ร่ม", "", f2(r.aUmbrella) + " m²")}${row("พื้นที่เงา", "", f2(r.aShadow) + " m²")}
-${row("พิกัดฉาก", "(x, y)", dash(`(${sg(r.xc)}, ${sg(r.yc)}) m`))}${row("พิกัดเชิงขั้ว", "(d, ψ<sub>Shadow</sub>)", dash(`(${f2(r.d)} m, ${f2(r.psiShadow, 1)}°)`))}</dl>`;
+${row("ทิศของเงา", "ψ<sub>Shadow</sub>", dash(isTiny(r) ? "ไม่มีทิศ (เงาอยู่ที่โคนเสา)" : f2(r.psiShadow) + "° (" + r.dirName + ")"))}${row("มุมจากแนวดิ่ง", "θ", f2(r.theta) + "°")}
+${row("ระยะเงา", "d", dash(dTxt(r)))}${row("พื้นที่ร่ม", "", f2(r.aUmbrella) + " m²")}${row("พื้นที่เงา", "", f2(r.aShadow) + " m²")}
+${row("พิกัดฉาก", "(x, y)", dash(xyTxt(r)))}${row("พิกัดเชิงขั้ว", "(d, ψ<sub>Shadow</sub>)", dash(isTiny(r) ? `(${dTxt(r)}, ไม่มีทิศ)` : `(${f2(r.d)} m, ${f2(r.psiShadow, 1)}°)`))}</dl>`;
   const sel = $("country"), city = sel.value >= 0 ? PLACES[sel.value][0] : "ตำแหน่งที่กำหนด";
   const dt = new Date(Date.UTC(p.y, p.m - 1, p.d)).toLocaleDateString("th-TH", { day: "numeric", month: "short", timeZone: "UTC" });
   $("ins-sub").textContent = `ค่าทั้งหมดที่ใช้คำนวณ ณ ${dt} เวลา ${hm(last.t)} น. ที่${city}`;
